@@ -14,16 +14,27 @@ from PyQt5.QtWidgets import QSpacerItem
 from PyQt5.QtWidgets import QStatusBar
 from PyQt5.QtWidgets import QWidget
 
-from PyQt5.QtCore import (Qt, QTimer, QFont)
+from PyQt5.QtCore import (Qt, QTimer)
 from PyQt5.QtGui import QFont
 
 PORTS = {}
+
+URL = "http://aswitch:8088"
 
 SELECTED_BTN = """QPushButton {
   background-color: rgb(0,80,200);
   border-style: solid;
   border-color: gray;
 }"""
+
+TITLE_STYLE = """QLabel {
+  background-color: #262626;
+  border-width: 2px;
+  border-color: darkgray;
+  border-style: solid; /* just a single line */
+  border-radius: 3px; /* same radius as the QComboBox */
+}"""
+
 
 class ASInterface(QMainWindow):
 
@@ -33,13 +44,13 @@ class ASInterface(QMainWindow):
     self.setWindowTitle("MacSwitch")
     layout = QGridLayout()
 
-    msg = QLabel("W6BSD\nAntenna Switch")
-    msg.setFont(QFont("Arial", 18, QFont.Black))
-    msg.setStyleSheet("QLabel {background-color: #AA4400;}")
-    msg.setFrameStyle(QFrame.Panel)
-    msg.setAlignment(Qt.AlignCenter)
-    msg.setFixedHeight(80)
-    layout.addWidget(msg, 0, 0, 1, 2)
+    title = QLabel("W6BSD\nAntenna Switch")
+    title.setFont(QFont("Arial", 18, QFont.Black))
+    title.setStyleSheet(TITLE_STYLE)
+    title.setFrameStyle(QFrame.Panel)
+    title.setAlignment(Qt.AlignCenter)
+    title.setFixedHeight(60)
+    layout.addWidget(title, 0, 0, 1, 2)
 
     self.buttons = {}
     for idx, name in PORTS.items():
@@ -104,7 +115,7 @@ class ASInterface(QMainWindow):
 
 
 def select_antenna(idx):
-  url = f'http://aswitch.home:8088/api/v1/select/{idx}'
+  url = '{}/api/v1/select/{}'.format(URL, idx)
   try:
     response = requests.get(url)
     response.raise_for_status()
@@ -121,7 +132,7 @@ def select_antenna(idx):
 
 
 def read_switch():
-  url = 'http://aswitch.home:8088/api/v1/ports'
+  url = '{}/api/v1/ports'.format(URL)
   try:
     response = requests.get(url)
     response.raise_for_status()
