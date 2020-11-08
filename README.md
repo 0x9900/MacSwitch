@@ -8,8 +8,7 @@ MacSwitch works with the ham radio HF Remote Antenna Switch. You can find more i
 
 Click on the button to switch between antennas.
 
-![Screenshoot](misc/MacSwitch.png){:height="50%" width="50%"}
-
+![Screenshoot](misc/MacSwitch.png)
 
 
 [1]: https://0x9900.com/remote-controlled-antenna-switch/
