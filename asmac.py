@@ -30,7 +30,7 @@ class ASInterface(QMainWindow):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
 
-    self.setWindowTitle("Antenna Switch")
+    self.setWindowTitle("MacSwitch")
     layout = QGridLayout()
 
     msg = QLabel("W6BSD\nAntenna Switch")
