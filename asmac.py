@@ -101,6 +101,8 @@ class ASInterface(QMainWindow):
 
     try:
       reply = select_antenna(idx)
+      if reply['status'] != 'OK':
+        raise SystemError(reply['msg'])
     except SystemError as err:
       self.statusbar.showMessage(err.args[0])
       return
