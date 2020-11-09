@@ -99,9 +99,8 @@ class ASInterface(QMainWindow):
     sender = self.sender()
     idx = sender.port_number
 
-    self.statusbar.showMessage(sender.text() + ' selected', 2000)
     try:
-      select_antenna(idx)
+      reply = select_antenna(idx)
     except SystemError as err:
       self.statusbar.showMessage(err.args[0])
       return
@@ -112,6 +111,7 @@ class ASInterface(QMainWindow):
 
     sender.setEnabled(False)
     sender.setStyleSheet(SELECTED_BTN)
+    self.statusbar.showMessage(reply['msg'], 5000)
 
 
 def select_antenna(idx):
