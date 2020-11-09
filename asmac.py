@@ -1,4 +1,4 @@
-#!/usr/bin/exec python3
+#!/usr/bin/env python3.7
 import sys
 
 import requests
@@ -85,7 +85,12 @@ class ASInterface(QMainWindow):
 
   def checkswitch(self):
     self.timer.setInterval(5000)
-    switch = read_switch()
+    try:
+      switch = read_switch()
+    except SystemError as err:
+      self.statusbar.showMessage("Connection Error", 5000)
+      return
+
     for idx, port in switch.items():
       idx = int(idx)
       if port['status'] == 1:
@@ -136,7 +141,7 @@ def select_antenna(idx):
 def read_switch():
   url = '{}/api/v1/ports'.format(URL)
   try:
-    response = requests.get(url)
+    response = requests.get(url, timeout=1)
     response.raise_for_status()
   except requests.HTTPError as http_err:
     raise SystemError(f'HTTP error: {http_err}') from http_err
