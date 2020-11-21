@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.7
 import sys
+import time
 
 import requests
 
@@ -87,8 +88,8 @@ class ASInterface(QMainWindow):
     self.timer.setInterval(5000)
     try:
       switch = read_switch()
-    except SystemError as err:
-      self.statusbar.showMessage("Connection Error", 5000)
+    except (IOError, SystemError) as err:
+      self.statusbar.showMessage("Connection Error", 2000)
       return
 
     for idx, port in switch.items():
@@ -138,27 +139,41 @@ def select_antenna(idx):
   return response.json()
 
 
-def read_switch():
+def read_switch(timeout=2):
   url = '{}/api/v1/ports'.format(URL)
   try:
-    response = requests.get(url, timeout=1)
+    response = requests.get(url, timeout=timeout)
     response.raise_for_status()
-  except requests.HTTPError as http_err:
-    raise SystemError(f'HTTP error: {http_err}') from http_err
+  except requests.ConnectionError as err:
+    raise IOError('Connection Error')
+  except requests.HTTPError as err:
+    raise SystemError(f'HTTP error: {http_err}')
   except Exception as err:
-    raise SystemError(f'Other error: {err}') from err
+    raise SystemError(f'Other error: {err}')
 
   return response.json()
 
 def main():
   global PORTS
-  try:
-    switch = read_switch()
-    for key, port in sorted(switch.items()):
-      PORTS[int(key)] = port['label']
-  except SystemError as err:
-    print(err)
-    sys.exit(1)
+  while True:
+    try:
+      switch = read_switch()
+    except IOError as err:
+      print(err)
+      print('Waiting for the switch to be turned on')
+      time.sleep(10)
+    except SystemError as err:
+      print(err)
+      sys.exit()
+    else:
+      print('Connected...')
+      break
+
+  print('Inititalizing...')
+  print('Reading swtich configuration...')
+  for key, port in sorted(switch.items()):
+    PORTS[int(key)] = port['label']
+  print('{:d} Ports found'.format(len(PORTS)))
 
   app = QApplication(sys.argv)
   view = ASInterface()
