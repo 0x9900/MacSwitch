@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.7
+import logging
 import sys
 import time
 
@@ -18,9 +19,13 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import (Qt, QTimer)
 from PyQt5.QtGui import QFont
 
+logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.INFO)
+
 PORTS = {}
 
-URL = "http://aswitch:8088"
+URL = "http://aswitch.home:8088"
 
 SELECTED_BTN = """QPushButton {
   background-color: rgb(0,80,200);
@@ -65,7 +70,7 @@ class ASInterface(QMainWindow):
     layout.addItem(spacer)
 
     qbtn = QPushButton('Quit', self)
-    qbtn.clicked.connect(QApplication.instance().quit)
+    qbtn.clicked.connect(self.quit)
     qbtn.resize(100, 50)
 
     pos = len(PORTS)
@@ -84,12 +89,20 @@ class ASInterface(QMainWindow):
     self.timer.timeout.connect(self.checkswitch)
     self.timer.start()
 
+  def quit(self):
+    logging.info('bye bye')
+    QApplication.quit()
+
   def checkswitch(self):
     self.timer.setInterval(5000)
     try:
       switch = read_switch()
-    except (IOError, SystemError) as err:
+    except IOError as err:
       self.statusbar.showMessage("Connection Error", 2000)
+      return
+    except SystemError as err:
+      self.statusbar.showMessage("HTTP Error", 2000)
+      logging.error(err)
       return
 
     for idx, port in switch.items():
@@ -110,6 +123,7 @@ class ASInterface(QMainWindow):
       if reply['status'] != 'OK':
         raise SystemError(reply['msg'])
     except SystemError as err:
+      logging.warning(err.args[0])
       self.statusbar.showMessage(err.args[0])
       return
 
@@ -134,6 +148,7 @@ def select_antenna(idx):
 
   data = response.json()
   if data['status'] == 'ERROR':
+    logging.error(data['msg'])
     raise SystemError(data['msg'])
 
   return response.json()
@@ -159,21 +174,21 @@ def main():
     try:
       switch = read_switch()
     except IOError as err:
-      print(err)
-      print('Waiting for the switch to be turned on')
+      logging.error(err)
+      logging.info('Waiting for the switch to be turned on')
       time.sleep(10)
     except SystemError as err:
-      print(err)
+      logging.error(err)
       sys.exit()
     else:
-      print('Connected...')
+      logging.info('Connected...')
       break
 
-  print('Inititalizing...')
-  print('Reading swtich configuration...')
+  logging.info('Inititalizing...')
+  logging.info('Reading swtich configuration...')
   for key, port in sorted(switch.items()):
     PORTS[int(key)] = port['label']
-  print('{:d} Ports found'.format(len(PORTS)))
+  logging.info('{:d} Ports found'.format(len(PORTS)))
 
   app = QApplication(sys.argv)
   view = ASInterface()
