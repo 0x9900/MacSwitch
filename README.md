@@ -10,5 +10,10 @@ Click on the button to switch between antennas.
 
 ![Screenshoot](misc/MacSwitch.png)
 
-
 [1]: https://0x9900.com/remote-controlled-antenna-switch/
+
+## Installation
+
+```
+$ pip install MacSwitch --user
+```
