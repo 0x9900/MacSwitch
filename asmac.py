@@ -20,7 +20,7 @@ from PyQt5.QtCore import (Qt, QTimer)
 from PyQt5.QtGui import QFont
 
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
-                    datefmt='%H:%M:%S',
+                    datefmt='%c',
                     level=logging.INFO)
 
 PORTS = {}
