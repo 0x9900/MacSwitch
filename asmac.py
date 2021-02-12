@@ -188,6 +188,8 @@ def main():
   logging.info('Reading swtich configuration...')
   for key, port in sorted(switch.items()):
     PORTS[int(key)] = port['label']
+    status = 'Selected' if port['status'] else 'Ready'
+    logging.info('Port: "{}" {}'.format(port['label'], status))
   logging.info('{:d} Ports found'.format(len(PORTS)))
 
   app = QApplication(sys.argv)
