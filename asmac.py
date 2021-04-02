@@ -27,7 +27,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
 PORTS = {}
 
 URL = "http://192.168.10.180:8088"
-URL = "http://aswitch.home:8088"
+# URL = "http://aswitch.home:8088"
 
 SELECTED_BTN = """QPushButton {
   background-color: rgb(0,80,200);
