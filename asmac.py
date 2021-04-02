@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.7
+import argparse
 import logging
 import sys
 import time
@@ -25,6 +26,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
 
 PORTS = {}
 
+URL = "http://192.168.10.180:8088"
 URL = "http://aswitch.home:8088"
 
 SELECTED_BTN = """QPushButton {
@@ -170,6 +172,17 @@ def read_switch(timeout=2):
 
 def main():
   global PORTS
+  global URL
+
+  parser = argparse.ArgumentParser(
+    description="Remote control for the Wireless Antenna Switch",
+  )
+  parser.add_argument("--url", type=str, default=URL,
+                      help="Switch's URL [default: %(default)s]")
+  opts = parser.parse_args()
+  if opts.url:
+    URL = opts.url
+
   while True:
     try:
       switch = read_switch()

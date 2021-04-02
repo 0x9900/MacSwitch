@@ -15,7 +15,7 @@ For more information check https://0x9900.com/remote-controlled-antenna-switch/
 """
 
 __author__ = "Fred C. (W6BSD)"
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __license__ = 'BSD'
 
 py_version = sys.version_info[:2]
