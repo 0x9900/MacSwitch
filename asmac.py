@@ -26,8 +26,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
 
 PORTS = {}
 
-URL = "http://192.168.10.180:8088"
-# URL = "http://aswitch.home:8088"
+URL = "http://aswitch.home:8088"
 
 SELECTED_BTN = """QPushButton {
   background-color: rgb(0,80,200);
@@ -164,7 +163,7 @@ def read_switch(timeout=2):
   except requests.ConnectionError as err:
     raise IOError('Connection Error')
   except requests.HTTPError as err:
-    raise SystemError(f'HTTP error: {http_err}')
+    raise SystemError(f'HTTP error: {err}')
   except Exception as err:
     raise SystemError(f'Other error: {err}')
 
@@ -181,7 +180,7 @@ def main():
                       help="Switch's URL [default: %(default)s]")
   opts = parser.parse_args()
   if opts.url:
-    URL = opts.url
+    URL = opts.url.rstrip('/')
 
   while True:
     try:
