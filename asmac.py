@@ -138,6 +138,8 @@ class ASInterface(QMainWindow):
 
 
 def select_antenna(idx):
+  global PORTS
+
   url = '{}/api/v1/select/{}'.format(URL, idx)
   try:
     response = requests.get(url)
@@ -151,6 +153,8 @@ def select_antenna(idx):
   if data['status'] == 'ERROR':
     logging.error(data['msg'])
     raise SystemError(data['msg'])
+  else:
+    logging.info('%s "%s"', data['msg'], PORTS[data['port']])
 
   return response.json()
 
