@@ -4,6 +4,8 @@ import sys
 
 from setuptools import setup, find_packages
 
+import asmac
+
 __doc__ = """
 ## MacSwitch
 
@@ -15,7 +17,7 @@ For more information check https://0x9900.com/remote-controlled-antenna-switch/
 """
 
 __author__ = "Fred C. (W6BSD)"
-__version__ = '0.1.8'
+__version__ = asmac.__version__
 __license__ = 'BSD'
 
 py_version = sys.version_info[:2]

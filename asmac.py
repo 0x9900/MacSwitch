@@ -20,6 +20,8 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import (Qt, QTimer)
 from PyQt5.QtGui import QFont
 
+__version__ = '0.1.9'
+
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
                     datefmt='%c',
                     level=logging.INFO)
@@ -186,6 +188,8 @@ def main():
   if opts.url:
     URL = opts.url.rstrip('/')
 
+  logging.info('MacSwitch version: %s', __version__)
+
   while True:
     try:
       switch = read_switch()
@@ -201,7 +205,7 @@ def main():
       break
 
   logging.info('Inititalizing...')
-  logging.info('Reading swtich configuration...')
+  logging.info('Reading the swtich configuration...')
   for key, port in sorted(switch.items()):
     PORTS[int(key)] = port['label']
     status = 'Selected' if port['status'] else 'Ready'
