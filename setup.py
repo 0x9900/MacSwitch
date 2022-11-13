@@ -15,12 +15,12 @@ For more information check https://0x9900.com/remote-controlled-antenna-switch/
 """
 
 __author__ = "Fred C. (W6BSD)"
-__version__ = '0.1.7'
+__version__ = '0.1.8'
 __license__ = 'BSD'
 
 py_version = sys.version_info[:2]
-if py_version < (3, 5):
-  raise RuntimeError('MacSwitch requires Python 3.5 or later')
+if py_version < (3, 8):
+  raise RuntimeError('MacSwitch requires Python 3.8 or later')
 
 setup(
   name='MacSwitch',
@@ -38,13 +38,16 @@ setup(
     'console_scripts': ['macswitch = asmac:main'],
   },
   classifiers=[
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',
+    'Environment :: X11 Applications :: Qt',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
     'Topic :: Communications :: Ham Radio',
   ],
 )
